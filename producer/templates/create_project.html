@@ -1,4 +1,5 @@
-<!-- create_project.html -->
+<!-- templates/create_project.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,58 +7,51 @@
     <title>Create Project</title>
     <style>
         body {
-            background: linear-gradient(to right, #000000, #0d0d0d);
-            font-family: 'Chiller', cursive;
-            color: #ff0000;
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
+            min-height: 100vh;
         }
         .container {
-            background-color: #1a1a1a;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
             padding: 20px;
             max-width: 400px;
             width: 100%;
-            animation: pulsate 1s infinite alternate;
         }
         h1 {
-            color: #ff6666;
+            color: #333;
             text-align: center;
-            text-transform: uppercase;
+            margin-bottom: 20px;
         }
         form {
             display: flex;
             flex-direction: column;
         }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
         input, textarea, button {
             margin-bottom: 10px;
             padding: 8px;
-            border: 1px solid #ff0000;
-            border-radius: 5px;
-            background-color: #333333;
-            color: #ff0000;
+            border: 1px solid #ccc;
+            border-radius: 3px;
         }
         button {
-            background-color: #ff0000;
+            background-color: #007bff;
+            color: #fff;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #ff6666;
-        }
-        @keyframes pulsate {
-            from {
-                transform: scale(1);
-            }
-            to {
-                transform: scale(1.1);
-            }
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -66,7 +60,12 @@
         <h1>Create a New Project</h1>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
+            <label for="id_name">Name:</label>
+            {{ form.name }}
+            <label for="id_description">Description:</label>
+            {{ form.description }}
+            <label for="id_total_budget">Total Budget:</label>
+            {{ form.total_budget }}
             <button type="submit">Create Project</button>
         </form>
     </div>

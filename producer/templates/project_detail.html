@@ -1,0 +1,22 @@
+<!-- templates/project_detail.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Детали проекта</title>
+    <style>
+        /* Ваши стили могут быть добавлены здесь */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ project.name }}</h1>
+        <p><strong>Описание:</strong> {{ project.description }}</p>
+        <p><strong>Бюджет:</strong> {{ project.total_budget }}</p>
+        <form action="{% url 'delete_project' project.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Удалить">
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!-- templates/project_list.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список проектов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .field-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .field-value {
+            color: #333;
+        }
+        a.button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+        a.button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Список проектов</h1>
+        <ul>
+            {% for project in projects %}
+                <li>
+                    <span class="field-label">Название:</span> <span class="field-value">{{ project.name }}</span><br>
+                    <span class="field-label">Описание:</span> <span class="field-value">{{ project.description }}</span><br>
+                    <span class="field-label">Бюджет:</span> <span class="field-value">{{ project.total_budget }}</span>
+                    <form action="{% url 'delete_project' project.id %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="submit" value="Удалить">
+                    </form>
+                    <a href="{% url 'project_detail' project.id %}" class="button">Детальная</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'create_project' %}" class="button">Создать новый проект</a>
+    </div>
+</body>
+</html>
