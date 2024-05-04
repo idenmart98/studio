@@ -1,22 +1,113 @@
-<!-- templates/project_detail.html -->
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Детали проекта</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details</title>
     <style>
-        /* Ваши стили могут быть добавлены здесь */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+          
+            
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .bloc_met {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .bloc_met p {
+            margin: 8px 0;
+        }
+        
+        .bloc_met .field-label {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .bloc_met .field-value {
+            color: #666;
+        }
+        
+        .field-label {
+            font-weight: bold;
+            color: #333;
+        }
+        .field-value {
+            color: #666;
+        }
+        form {
+            margin-top: 20px;
+            display: inline-block; /* Align with the button */
+        }
+        input[type="submit"] {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .button {
+            display: inline-block;
+            padding: 8px 16px;
+            margin-left: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>{{ project.name }}</h1>
-        <p><strong>Описание:</strong> {{ project.description }}</p>
-        <p><strong>Бюджет:</strong> {{ project.total_budget }}</p>
+        <p><span class="field-label">Описание:</span> <span class="field-value">{{ project.description }}</span></p>
+        <p><span class="field-label">Бюджет:</span> <span class="field-value">{{ project.total_budget }}</span></p>
+
+        {% for project_category in project_categories %}
+    <div class="bloc_met" styles>
+            <p><span class="field-label">Категория:</span> <span class="field-value">{{ project_category.category.name }}</span></p>
+            <p><span class="field-label">Бюджет:</span> <span class="field-value">{{ project_category.budget }}</span></p>
+    </div>
+        {% endfor%}
         <form action="{% url 'delete_project' project.id %}" method="post">
             {% csrf_token %}
             <input type="submit" value="Удалить">
         </form>
+        <a class="button" href="{% url 'edit_project' project.id %}">Редактирование</a>
     </div>
 </body>
 </html>
