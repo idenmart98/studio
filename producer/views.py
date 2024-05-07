@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ProjectForm, CategoryForm
+from .forms import ProjectForm, CategoryForm, CategoryProjectForm
 from .models import Project, CategoryProject
 
 def create_project(request):
@@ -46,3 +46,20 @@ def create_category(request):
     else:
         form = CategoryForm()
     return render(request, 'create_category.html', {'form': form})
+
+
+def create_project_category(request, pk):  # Добавлен project_id в параметры
+    project = get_object_or_404(Project, pk=pk)  # Получаем объект проекта по ID
+
+    if request.method == 'POST':
+        form = CategoryProjectForm(request.POST)
+        if form.is_valid():
+            category_project = form.save(commit=False)
+            category_project.project = project  # Присваиваем проект категории проекта
+            category_project.save()
+            return redirect('project_detail', pk=pk)  # Перенаправляем на страницу деталей проекта
+    else:
+        form = CategoryProjectForm(initial={'project': project})  # Предварительно заполняем форму проектом
+
+    return render(request, 'create_project_category.html', {'form': form})
+

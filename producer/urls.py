@@ -5,7 +5,8 @@ from .views import (
     delete_project, 
     project_detail, 
     edit_project,
-    create_category
+    create_category,
+    create_project_category
     )
 
 urlpatterns = [
@@ -15,5 +16,5 @@ urlpatterns = [
     path('<int:pk>/', project_detail, name='project_detail'),
     path('edit/<int:pk>/', edit_project, name='edit_project'),
     path('create/category', create_category, name='create_category'),
-
+    path('create/category/project/<int:pk>', create_project_category, name='create_category_project'),
 ]
