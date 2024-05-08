@@ -61,5 +61,5 @@ def create_project_category(request, pk):  # Добавлен project_id в па
     else:
         form = CategoryProjectForm(initial={'project': project})  # Предварительно заполняем форму проектом
 
-    return render(request, 'create_project_category.html', {'form': form})
+    return render(request, 'create_category_project.html', {'form': form})
 
