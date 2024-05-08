@@ -8,16 +8,20 @@
         <p><span class="field-label">Бюджет:</span> <span class="field-value">{{ project.total_budget }}</span></p>
 
         {% for project_category in project_categories %}
-    <div class="bloc_met" styles>
+        <div class="alert alert-primary" role="alert">
             <p><span class="field-label">Категория:</span> <span class="field-value">{{ project_category.category.name }}</span></p>
-            <p><span class="field-label">Бюджет:</span> <span class="field-value">{{ project_category.budget }}</span></p>
-    </div>
+            <p><span class="field-label">Бюджет:</span> <span class="field-value">{{ project_category.budget }}</span></p>          
+        </div>
         {% endfor%}
+        <a class="btn btn-primary" href="{% url 'edit_project' project.id %}">Редактирование</a>
+        <br>
+        <br>
+        <a class="btn btn-primary" href="{% url 'create_category_project' project.id %}">Добавить категорию расхода</a>
+        <br>
+        <br>
         <form action="{% url 'delete_project' project.id %}" method="post">
             {% csrf_token %}
             <input type="submit" value="Удалить">
         </form>
-        <a class="button" href="{% url 'edit_project' project.id %}">Редактирование</a>
-        <a class="button" href="{% url 'create_category_project' project.id %}">Добавить категорию расхода</a>
     </div>
 {% endblock %}

@@ -2,18 +2,24 @@
 
 
 {% block content %}
+<div class="card text-center">
+    <div class="card-header">
+        Список проектов
+    </div>
+    <div class="card-body">
+        {% for project in projects %}
+            <div class="alert alert-info" role="alert">
 
-    <div class="container">
-        <h1>Список проектов</h1>
-        <ul>
-            {% for project in projects %}
                 <a style="text-decoration:none" href="{% url 'project_detail' project.id %}">
                     <li>
                         <span class="field-value">{{ project.name }}</span><br>
                     </li>
                 </a>
-            {% endfor %}
-        </ul>
-    </div>
 
+            </div> 
+        {% endfor %}
+    </div>
+    <div class="card-footer text-body-secondary">
+    </div>
+  </div>
 {% endblock %}
