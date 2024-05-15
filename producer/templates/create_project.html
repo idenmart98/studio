@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
     <div class="container">
         <h1>Create a New Project</h1>
@@ -12,6 +11,8 @@
             {{ form.description }}
             <label for="id_total_budget">Total Budget:</label>
             {{ form.total_budget }}
+            <label for="id_deadline">Deadline:</label>
+            {{ form.deadline }}  <!-- Выводим поле deadline -->
             <button type="submit">Create Project</button>
         </form>
     </div>

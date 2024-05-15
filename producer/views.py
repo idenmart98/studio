@@ -13,7 +13,7 @@ def create_project(request):
     return render(request, 'create_project.html', {'form': form})
 
 def project_list(request):
-    projects = Project.objects.all()
+    projects = Project.objects.all().order_by('deadline')
     return render(request, 'project_list.html', {'projects': projects})
 
 def delete_project(request, pk):

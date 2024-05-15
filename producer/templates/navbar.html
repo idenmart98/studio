@@ -16,6 +16,15 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'create_category' %}">+Категория</a>
           </li>
+
+          <li class="nav-item">
+            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+              {% csrf_token %}
+            </form>
+            <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+              Выход
+            </a>
+          </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Dropdown

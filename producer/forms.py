@@ -4,7 +4,10 @@ from .models import Project, Category, CategoryProject
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'description', 'total_budget']
+        fields = ['name', 'description', 'total_budget', 'deadline']
+        widgets = {
+            'deadline': forms.DateTimeInput(attrs={'type': 'datetime-local'})
+        }
 
 class CategoryForm(forms.ModelForm):
     class Meta:
