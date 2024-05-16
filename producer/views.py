@@ -1,7 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ProjectForm, CategoryForm, CategoryProjectForm
 from .models import Project, CategoryProject
 
+@login_required
 def create_project(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
@@ -12,20 +14,24 @@ def create_project(request):
         form = ProjectForm()
     return render(request, 'create_project.html', {'form': form})
 
+@login_required
 def project_list(request):
     projects = Project.objects.all().order_by('deadline')
     return render(request, 'project_list.html', {'projects': projects})
 
+@login_required
 def delete_project(request, pk):
     project = get_object_or_404(Project, pk=pk)
     project.delete()
     return redirect('project_list')
 
+@login_required
 def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
     project_categories = CategoryProject.objects.filter(project_id=pk)
     return render(request, 'project_detail.html', {'project': project, 'project_categories': project_categories})
 
+@login_required
 def edit_project(request, pk):
     project = get_object_or_404(Project, pk=pk)
     if request.method == 'POST':
@@ -37,6 +43,7 @@ def edit_project(request, pk):
         form = ProjectForm(instance=project)
     return render(request, 'edit_project.html', {'form': form})
 
+@login_required
 def create_category(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -47,7 +54,7 @@ def create_category(request):
         form = CategoryForm()
     return render(request, 'create_category.html', {'form': form})
 
-
+@login_required
 def create_project_category(request, pk):  # Добавлен project_id в параметры
     project = get_object_or_404(Project, pk=pk)  # Получаем объект проекта по ID
 
