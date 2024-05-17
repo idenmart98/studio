@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, Category, CategoryProject
+from .models import Project, Category, CategoryProject, Expense
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -18,3 +18,9 @@ class CategoryProjectAdmin(admin.ModelAdmin):
     list_display=('budget', )
 
 admin.site.register(CategoryProject, CategoryProjectAdmin)
+
+
+class ExpenseAdmin(admin.ModelAdmin):
+    list_display=('name', )
+
+admin.site.register(Expense, ExpenseAdmin)

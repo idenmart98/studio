@@ -27,4 +27,10 @@ class CategoryProject(models.Model):
         on_delete=models.CASCADE,
         related_name='category_projects')
     budget = models.DecimalField(decimal_places=0, max_digits=12, default=0)
-    
+
+
+class Expense(models.Model):
+    name = models.TextField()
+    receipt_image = models.ImageField()
+    cost = models.DecimalField(decimal_places=0, max_digits=12, default=0)
+    category = models.ForeignKey(CategoryProject, on_delete=models.CASCADE)

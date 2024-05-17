@@ -10,7 +10,8 @@
         {% for project_category in project_categories %}
         <div class="alert alert-primary" role="alert">
             <p><span class="field-label">Категория:</span> <span class="field-value">{{ project_category.category.name }}</span></p>
-            <p><span class="field-label">Бюджет:</span> <span class="field-value">{{ project_category.budget }}</span></p>          
+            <p><span class="field-label">Бюджет:</span> <span class="field-value">{{ project_category.budget }}</span></p> 
+            <p><span class="field-label">Пользователь:</span> <span class="field-value">{{ project_category.user }}</span></p>           
         </div>
         {% endfor%}
         <a class="btn btn-primary" href="{% url 'edit_project' project.id %}">Редактирование</a>
