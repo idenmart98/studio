@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card text-center">
+<div class="card text-center" style="max-width: 400px; margin: 0 auto;">
     <h2>Вход</h2>
     <form method="post">
         {% csrf_token %}
@@ -10,3 +10,4 @@
     </form>
 </div>
 {% endblock %}
+
