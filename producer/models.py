@@ -20,5 +20,11 @@ class Category(models.Model):
 class CategoryProject(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    budget = models.DecimalField(decimal_places=0, max_digits=12)
+    user = models.ForeignKey(
+        'users.User',
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='category_projects')
+    budget = models.DecimalField(decimal_places=0, max_digits=12, default=0)
     

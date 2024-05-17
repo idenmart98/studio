@@ -17,4 +17,4 @@ class CategoryForm(forms.ModelForm):
 class CategoryProjectForm(forms.ModelForm):
     class Meta:
         model = CategoryProject
-        fields = ['category', 'project', 'budget']
+        fields = ['category', 'project', 'budget', 'user']
