@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'producer',
     'users',
+    'tasks_app'
 ]
 
 AUTH_USER_MODEL = 'users.User'

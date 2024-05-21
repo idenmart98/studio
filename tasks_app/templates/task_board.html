@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Board</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .board {
+            display: flex;
+            justify-content: space-around;
+            width: 90%;
+            max-width: 1200px;
+        }
+        .column {
+            width: 30%;
+            padding: 10px;
+            border-radius: 5px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .column h3 {
+            text-align: center;
+            margin: 0;
+            padding: 10px 0;
+            color: #fff;
+            border-radius: 5px 5px 0 0;
+        }
+        .column#to-do h3 {
+            background-color: #ff7675;
+        }
+        .column#in-progress h3 {
+            background-color: #74b9ff;
+        }
+        .column#done h3 {
+            background-color: #55efc4;
+        }
+        .task {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f1f2f6;
+            border-left: 5px solid;
+            border-radius: 3px;
+            cursor: grab;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task:hover {
+            background: #dfe6e9;
+        }
+        .task i {
+            color: #636e72;
+        }
+        .task[data-status="to_do"] {
+            border-color: #ff7675;
+        }
+        .task[data-status="in_progress"] {
+            border-color: #74b9ff;
+        }
+        .task[data-status="done"] {
+            border-color: #55efc4;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+</head>
+<body>
+    <div class="board">
+        <div class="column" id="to-do">
+            <h3>To Do</h3>
+            {% for task in tasks_to_do %}
+                <div class="task" data-id="{{ task.id }}" data-status="to_do">
+                    {{ task }} <i class="fas fa-tasks"></i>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="column" id="in-progress">
+            <h3>In Progress</h3>
+            {% for task in tasks_in_progress %}
+                <div class="task" data-id="{{ task.id }}" data-status="in_progress">
+                    {{ task }} <i class="fas fa-spinner"></i>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="column" id="done">
+            <h3>Done</h3>
+            {% for task in tasks_done %}
+                <div class="task" data-id="{{ task.id }}" data-status="done">
+                    {{ task }} <i class="fas fa-check-circle"></i>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        const columns = ['to-do', 'in-progress', 'done'];
+
+        columns.forEach(column => {
+            new Sortable(document.getElementById(column), {
+                group: 'tasks',
+                animation: 150,
+                onEnd: function (evt) {
+                    const taskId = evt.item.getAttribute('data-id');
+                    const newStatus = evt.to.id.replace('-', '_');
+
+                    fetch("{% url 'update_task_status' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: `task_id=${taskId}&new_status=${newStatus}`
+                    }).then(response => response.json()).then(data => {
+                        if (data.status === 'success') {
+                            evt.item.setAttribute('data-status', newStatus);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
