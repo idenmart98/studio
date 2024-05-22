@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class ShopList(models.Model):
-    pass
+    task = models.OneToOneField('tasks_app.Task', on_delete=models.CASCADE)
 
 class ShopListItem(models.Model):
     name = models.CharField(max_length=50)
@@ -33,6 +33,7 @@ class Task(models.Model):
     task_type = models.CharField(max_length=50, choices=TASK_TYPE_CHOICES, default=BUY)
     category = models.ForeignKey('producer.CategoryProject', on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=TASK_STATUS_CHOICES, default=TO_DO)
+    
 
     def __str__(self):
         return f"{self.get_task_type_display()} - {self.get_status_display()}"

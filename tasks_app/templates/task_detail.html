@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/task_detail.css' %}">
+    <div class="task-detail-container">
+        <h2>Task Detail</h2>
+        <div class="task-detail">
+            <p><strong>Task Type:</strong> {{ task.get_task_type_display }}</p>
+            <p><strong>Category:</strong> {{ task.category.category.name }}</p>
+            <p><strong>Project:</strong> {{ task.category.project.name }}</p>
+            <p><strong>Status:</strong> {{ task.get_status_display }}</p>
+            <!-- Добавьте больше полей, если необходимо -->
+        </div>
+        <a href="{% url 'task_board' %}" class="back-button">Back to Task Board</a>
+    </div>
+{% endblock %}

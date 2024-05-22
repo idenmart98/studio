@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.detail import DetailView
 from .models import Task
 
 def task_board(request):
@@ -14,6 +16,7 @@ def task_board(request):
     })
 
 @require_POST
+@csrf_exempt
 def update_task_status(request):
     task_id = request.POST.get('task_id')
     new_status = request.POST.get('new_status')
@@ -21,3 +24,9 @@ def update_task_status(request):
     task.status = new_status
     task.save()
     return JsonResponse({'status': 'success'})
+
+class TaskDetailView(DetailView):
+    model = Task
+    template_name = 'task_detail.html'
+    context_object_name = 'task'
+    
