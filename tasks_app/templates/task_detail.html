@@ -13,6 +13,6 @@
             <p><strong>Status:</strong> {{ task.get_status_display }}</p>
             <!-- Добавьте больше полей, если необходимо -->
         </div>
-        <a href="{% url 'task_board' %}" class="back-button">Back to Task Board</a>
+        <a href="{% url 'tasks:task_board' %}" class="back-button">Back to Task Board</a>
     </div>
 {% endblock %}

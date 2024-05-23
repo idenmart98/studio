@@ -12,6 +12,9 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'create_category' %}">+Категория</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'tasks:task_board' %}">Задачи</a>
+          </li>
 
           <li class="nav-item">
             <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">

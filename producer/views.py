@@ -1,3 +1,4 @@
+from .utils import create_task
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ProjectForm, CategoryForm, CategoryProjectForm
@@ -64,6 +65,9 @@ def create_project_category(request, pk):  # Добавлен project_id в па
             category_project = form.save(commit=False)
             category_project.project = project  # Присваиваем проект категории проекта
             category_project.save()
+
+            create_task(category_project=category_project)
+
             return redirect('project_detail', pk=pk)  # Перенаправляем на страницу деталей проекта
     else:
         form = CategoryProjectForm(initial={'project': project})  # Предварительно заполняем форму проектом

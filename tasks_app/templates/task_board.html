@@ -8,7 +8,7 @@
         <div class="column" id="to-do">
             <h3>To Do</h3>
             {% for task in tasks_to_do %}
-                <a href="{% url 'task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="to_do">
+                <a href="{% url 'tasks:task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="to_do">
                     {{ task }} <i class="fas fa-tasks"></i>
                 
                 </a>
@@ -17,7 +17,7 @@
         <div class="column" id="in-progress">
             <h3>In Progress</h3>
             {% for task in tasks_in_progress %}
-            <a href="{% url 'task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="in_progress">
+            <a href="{% url 'tasks:task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="in_progress">
                     {{ task }} <i class="fas fa-spinner"></i>
             </a>
             {% endfor %}
@@ -25,7 +25,7 @@
         <div class="column" id="done">
             <h3>Done</h3>
             {% for task in tasks_done %}
-            <a href="{% url 'task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="done">
+            <a href="{% url 'tasks:task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="done">
                     {{ task }} <i class="fas fa-check-circle"></i>
             </a>
             {% endfor %}
@@ -33,7 +33,7 @@
     </div>
     
     <script>
-        var UpdateTaskStatus = "{% url 'update_task_status' %}";
+        var UpdateTaskStatus = "{% url 'tasks:update_task_status' %}";
     </script>
     <script src="{% static 'js/task_board.js' %}"></script>
 {% endblock%}
