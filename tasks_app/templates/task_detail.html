@@ -1,18 +1,32 @@
+<!-- templates/task_detail.html -->
 {% extends 'base.html' %}
 
-{% load static %}
-
 {% block content %}
-    <link rel="stylesheet" href="{% static 'css/task_detail.css' %}">
-    <div class="task-detail-container">
-        <h2>Task Detail</h2>
-        <div class="task-detail">
-            <p><strong>Task Type:</strong> {{ task.get_task_type_display }}</p>
-            <p><strong>Category:</strong> {{ task.category.category.name }}</p>
-            <p><strong>Project:</strong> {{ task.category.project.name }}</p>
-            <p><strong>Status:</strong> {{ task.get_status_display }}</p>
-            <!-- Добавьте больше полей, если необходимо -->
-        </div>
-        <a href="{% url 'tasks:task_board' %}" class="back-button">Back to Task Board</a>
-    </div>
+<div class="container">
+  <div class="task-detail">
+    <h2>Task Detail</h2>
+    <p><strong>Task Type:</strong> {{ task.get_task_type_display }}</p>
+    <p><strong>Status:</strong> {{ task.get_status_display }}</p>
+    <p><strong>Category:</strong> {{ task.category.category }}</p>
+    <p><strong>Project:</strong> {{ task.category.project }}</p>
+    <p><strong>Budget:</strong> {{ task.category.budget }}</p>
+    <p><strong>User:</strong> {{ task.category.user }}</p>
+
+    <a href="{% url 'tasks:task_board' %}" class="back-button">Back to Task Board</a>
+  </div>
+
+  <div class="shoplist-items">
+    <h3>Shop List Items</h3>
+    <ul>
+      {% for item in shoplist_items %}
+        <li>{{ item.name }} - {{ item.price }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="add-shoplist-item">
+    <h3>Add Shop List Item</h3>
+    <a href="{% url 'tasks:add_shoplist_item' task.id %}" class="button">Add Shop List Item</a>
+  </div>
+</div>
 {% endblock %}

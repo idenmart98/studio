@@ -1,10 +1,8 @@
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.detail import DetailView
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Task, ShopList
+from .models import Task, ShopListItem, ShopList
 from .forms import ShopListItemForm
 
 def task_board(request):
@@ -27,25 +25,28 @@ def update_task_status(request):
     task.save()
     return JsonResponse({'status': 'success'})
 
-class TaskDetailView(DetailView):
-    model = Task
-    template_name = 'task_detail.html'
-    context_object_name = 'task'
+def task_detail(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    shoplist, created = ShopList.objects.get_or_create(task=task)
+    shoplist_items = ShopListItem.objects.filter(shoplist=shoplist)
 
-@login_required
+    return render(request, 'task_detail.html', {
+        'task': task,
+        'shoplist_items': shoplist_items,
+    })
+
 def add_shoplist_item(request, task_id):
     task = get_object_or_404(Task, id=task_id)
-    shoplist = get_object_or_404(ShopList, task=task)
-    
+    shoplist, created = ShopList.objects.get_or_create(task=task)
+
     if request.method == 'POST':
         form = ShopListItemForm(request.POST)
         if form.is_valid():
             shoplist_item = form.save(commit=False)
             shoplist_item.shoplist = shoplist
             shoplist_item.save()
-            return redirect('task_detail', pk=task_id)
+            return redirect('tasks:task_detail', task_id=task_id)
     else:
         form = ShopListItemForm()
-    
+
     return render(request, 'add_shoplist_item.html', {'form': form, 'task': task})
-    

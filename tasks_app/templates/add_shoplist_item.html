@@ -1,0 +1,14 @@
+<!-- templates/add_shoplist_item.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h2>Add Shop List Item</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Item</button>
+  </form>
+  <a href="{% url 'tasks:task_detail' task.id %}" class="back-button">Back to Task Detail</a>
+</div>
+{% endblock %}
