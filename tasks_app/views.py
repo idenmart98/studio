@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from .models import Task, ShopListItem, ShopList
+from django.contrib.auth.decorators import login_required
+from .models import Task, ShopListItem, ShopList, Order
 from .forms import ShopListItemForm
 
 def task_board(request):
@@ -50,3 +51,34 @@ def add_shoplist_item(request, task_id):
         form = ShopListItemForm()
 
     return render(request, 'add_shoplist_item.html', {'form': form, 'task': task})
+
+@login_required
+def get_shop_list(request):
+    shoplists = ShopList.objects.filter(task__category__user=request.user)
+    shoplist_items = ShopListItem.objects.filter(shoplist__in=shoplists)
+
+    if request.method == 'POST':
+        selected_items = request.POST.getlist('items')
+        if selected_items:
+            order = Order.objects.create()  # создаем новый заказ
+            for item_id in selected_items:
+                item = ShopListItem.objects.get(id=item_id)
+                order.items.add(item)
+            order.save()
+            return redirect('tasks:kanban_board')  # перенаправление на страницу канбан-доски после создания заказа
+
+    return render(request, 'shop_list.html', {'shoplist_items': shoplist_items})
+
+    
+    
+@login_required
+def kanban_board(request):
+    orders_backlog = Order.objects.filter(status='backlog')
+    orders_progress = Order.objects.filter(status='progress')
+    orders_done = Order.objects.filter(status='done')
+    
+    return render(request, 'kanban_board.html', {
+        'orders_backlog': orders_backlog,
+        'orders_progress': orders_progress,
+        'orders_done': orders_done,
+    })

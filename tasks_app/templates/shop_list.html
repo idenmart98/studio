@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select ShopList Items</title>
+</head>
+<body>
+    <h2>Select Items to Create Order</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for item in shoplist_items %}
+            <div>
+                <input type="checkbox" name="items" value="{{ item.id }}">
+                {{ item.name }} - {{ item.price }}
+            </div>
+        {% endfor %}
+        <button type="submit">Create Order</button>
+    </form>
+</body>
+</html>

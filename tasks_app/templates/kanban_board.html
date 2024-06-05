@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kanban Board</title>
+    <style>
+        .kanban-board {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+        .kanban-column {
+            width: 30%;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .kanban-column h3 {
+            text-align: center;
+        }
+        .kanban-card {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h2>Kanban Board</h2>
+    <div class="kanban-board">
+        <div class="kanban-column">
+            <h3>Backlog</h3>
+            {% for order in orders_backlog %}
+                <div class="kanban-card">
+                    Order {{ order.id }} - {{ order.created_at }}
+                    <ul>
+                        {% for item in order.items.all %}
+                            <li>{{ item.name }} - {{ item.price }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="kanban-column">
+            <h3>In Progress</h3>
+            {% for order in orders_progress %}
+                <div class="kanban-card">
+                    Order {{ order.id }} - {{ order.created_at }}
+                    <ul>
+                        {% for item in order.items.all %}
+                            <li>{{ item.name }} - {{ item.price }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="kanban-column">
+            <h3>Done</h3>
+            {% for order in orders_done %}
+                <div class="kanban-card">
+                    Order {{ order.id }} - {{ order.created_at }}
+                    <ul>
+                        {% for item in order.items.all %}
+                            <li>{{ item.name }} - {{ item.price }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
