@@ -7,24 +7,43 @@ from .models import Task, ShopListItem, ShopList, Order
 from .forms import ShopListItemForm
 
 def task_board(request):
-    tasks_to_do = Task.objects.filter(status=Task.TO_DO)
-    tasks_in_progress = Task.objects.filter(status=Task.IN_PROGRESS)
-    tasks_done = Task.objects.filter(status=Task.DONE)
+    user = request.user
+    if user.user_groups.filter(name='BUYER').exists():
+        tasks_to_do = Task.objects.filter(status=Task.TO_DO)
+        tasks_in_progress = Task.objects.filter(status=Task.IN_PROGRESS)
+        tasks_done = Task.objects.filter(status=Task.DONE)
+    elif user.user_groups.filter(name='EXECUTIVE_PRODUCER').exists():
+        tasks_to_do = Task.objects.filter(status=Task.DONE)
+        tasks_in_progress = Task.objects.filter(status=Task.IN_PROGRESS_EX_PROD)
+        tasks_done = Task.objects.filter(status=Task.DONE_EX_PROD)
+    else:
+        tasks_to_do = Task.objects.none()
+        tasks_in_progress = Task.objects.none()
+        tasks_done = Task.objects.none()
+
     return render(request, 'task_board.html', {
         'tasks_to_do': tasks_to_do,
         'tasks_in_progress': tasks_in_progress,
         'tasks_done': tasks_done,
     })
 
-@require_POST
-@csrf_exempt
-def update_task_status(request):
-    task_id = request.POST.get('task_id')
-    new_status = request.POST.get('new_status')
-    task = Task.objects.get(id=task_id)
-    task.status = new_status
-    task.save()
-    return JsonResponse({'status': 'success'})
+
+def update_task_status(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    new_status = request.POST.get('status')
+    comment_text = request.POST.get('comment', '')
+
+    if new_status:
+        task.update_status(new_status)
+    if comment_text:
+        task.add_comment(comment_text)
+
+    if request.is_ajax():
+        return JsonResponse({'status': 'success'})
+    else:
+        return redirect('tasks:task_detail', task_id=task_id)
+
+
 
 def task_detail(request, task_id):
     task = get_object_or_404(Task, id=task_id)

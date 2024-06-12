@@ -12,6 +12,17 @@
     <p><strong>Budget:</strong> {{ task.category.budget }}</p>
     <p><strong>User:</strong> {{ task.category.user }}</p>
 
+    <form method="post" action="{% url 'tasks:update_task_status' task.id %}">
+      {% csrf_token %}
+      <label for="status">Change Status:</label>
+      <select name="status" id="status">
+        {% for key, value in task.TASK_STATUS_CHOICES %}
+          <option value="{{ key }}" {% if task.status == key %}selected{% endif %}>{{ value }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Update Status</button>
+    </form>
+
     <a href="{% url 'tasks:task_board' %}" class="back-button">Back to Task Board</a>
   </div>
 
@@ -27,6 +38,20 @@
   <div class="add-shoplist-item">
     <h3>Add Shop List Item</h3>
     <a href="{% url 'tasks:add_shoplist_item' task.id %}" class="button">Add Shop List Item</a>
+  </div>
+
+  <div class="task-comments">
+    <h3>Comments</h3>
+    <ul>
+      {% for comment in task.comment_set.all %}
+        <li>{{ comment.comment }}</li>
+      {% endfor %}
+    </ul>
+    <form method="post" action="{% url 'tasks:update_task_status' task.id %}">
+      {% csrf_token %}
+      <textarea name="comment" rows="4"></textarea>
+      <button type="submit">Add Comment</button>
+    </form>
   </div>
 </div>
 {% endblock %}

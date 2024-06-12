@@ -4,6 +4,12 @@ from django.db import models
 
 class ShopList(models.Model):
     task = models.OneToOneField('tasks_app.Task', on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
+    category_project = models.OneToOneField(
+        'producer.CategoryProject', on_delete=models.CASCADE, blank=True, null=True
+        )
+
+    
 
 class ShopListItem(models.Model):
     name = models.CharField(max_length=50)
@@ -23,11 +29,15 @@ class Task(models.Model):
     TO_DO = 'to_do'
     IN_PROGRESS = 'in_progress'
     DONE = 'done'
+    IN_PROGRESS_EX_PROD = 'in_progress_ex_prod'
+    DONE_EX_PROD = 'done_ex_prod'
 
     TASK_STATUS_CHOICES = [
         (TO_DO, 'To Do'),
         (IN_PROGRESS, 'In Progress'),
         (DONE, 'Done'),
+        (IN_PROGRESS_EX_PROD, 'In Progress Ex Prod'),
+        (DONE_EX_PROD, 'Done Ex Prod'), 
     ]
 
     task_type = models.CharField(max_length=50, choices=TASK_TYPE_CHOICES, default=BUY)
@@ -37,7 +47,13 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.get_task_type_display()} - {self.get_status_display()}"
-    
+
+    def update_status(self, new_status):
+        self.status = new_status
+        self.save()
+
+    def add_comment(self, comment_text):
+        Comment.objects.create(task=self, comment=comment_text)
     
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -53,3 +69,8 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} - {self.status}"
+
+
+class Comment(models.Model):
+    comment = models.TextField()
+    task = models.ForeignKey('tasks_app.Task', on_delete=models.CASCADE)

@@ -1,39 +1,63 @@
+<!-- templates/task_board.html -->
 {% extends 'base.html' %}
 
 {% load static %}
 
-{% block content %}  
-    <link rel="stylesheet" href="{% static 'css/task_board.css' %}">
-    <div class="board">
-        <div class="column" id="to-do">
-            <h3>To Do</h3>
-            {% for task in tasks_to_do %}
-                <a href="{% url 'tasks:task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="to_do">
-                    {{ task }} <i class="fas fa-tasks"></i>
-                
-                </a>
-            {% endfor %}
-        </div>
-        <div class="column" id="in-progress">
-            <h3>In Progress</h3>
-            {% for task in tasks_in_progress %}
-            <a href="{% url 'tasks:task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="in_progress">
-                    {{ task }} <i class="fas fa-spinner"></i>
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/task_board.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.css">
+
+<div class="board">
+    <div class="column" id="to-do">
+        <h3>To Do</h3>
+        {% for task in tasks_to_do %}
+            <a href="{% url 'tasks:task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="to_do">
+                {{ task }} <i class="fas fa-tasks"></i>
             </a>
-            {% endfor %}
-        </div>
-        <div class="column" id="done">
-            <h3>Done</h3>
-            {% for task in tasks_done %}
-            <a href="{% url 'tasks:task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="done">
-                    {{ task }} <i class="fas fa-check-circle"></i>
-            </a>
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
-    
-    <script>
-        var UpdateTaskStatus = "{% url 'tasks:update_task_status' %}";
-    </script>
-    <script src="{% static 'js/task_board.js' %}"></script>
-{% endblock%}
+    <div class="column" id="in-progress">
+        <h3>In Progress</h3>
+        {% for task in tasks_in_progress %}
+            <a href="{% url 'tasks:task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="in_progress">
+                {{ task }} <i class="fas fa-spinner"></i>
+            </a>
+        {% endfor %}
+    </div>
+    <div class="column" id="done">
+        <h3>Done</h3>
+        {% for task in tasks_done %}
+            <a href="{% url 'tasks:task_detail' task.id %}" class="task" data-id="{{ task.id }}" data-status="done">
+                {{ task }} <i class="fas fa-check-circle"></i>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js"></script>
+<script>
+    var drake = dragula([document.getElementById('to-do'), document.getElementById('in-progress'), document.getElementById('done')]);
+
+    drake.on('drop', function (el, target, source, sibling) {
+        var taskId = el.getAttribute('data-id');
+        var newStatus = target.getAttribute('id').replace('-', '_');
+        updateTaskStatus(taskId, newStatus);
+    });
+
+    function updateTaskStatus(taskId, newStatus) {
+        fetch("{% url 'tasks:update_task_status' 0 %}".replace('0', taskId), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ status: newStatus })
+        }).then(response => response.json())
+          .then(data => {
+              if (data.status === 'success') {
+                  location.reload();
+              }
+          });
+    }
+</script>
+{% endblock %}

@@ -18,7 +18,7 @@ def login_request(request):
                 if user.user_groups.filter(name='LINE_PRODUCER').exists():
                     return redirect('tasks:task_board')
                 elif user.user_groups.filter(name='ACCOUNTANT').exists():
-                    return redirect('project_list')          
+                    return redirect('project_list')            
                 else:
                     messages.error(request, 'Неверные имя и/или пароль.')
             else:

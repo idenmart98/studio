@@ -7,11 +7,18 @@ class User(AbstractUser):
 DEFAULT = 'DEFAULT'
 ACCOUNTANT = 'ACCOUNTANT'
 LINE_PRODUCER = 'LINE_PRODUCER'
+PRODUCER = 'PRODUCER'
+EXECUTIVE_PRODUCER = 'EXECUTIVE_PRODUCER'
+BUYER = 'BUYER'
+
 
 USER_GROUP = (
     (DEFAULT, 'По умолчанию'),
     (ACCOUNTANT, 'Бухгалтер'),
     (LINE_PRODUCER, 'Линейный продюсер'),
+    (PRODUCER, 'Продюсер'),
+    (EXECUTIVE_PRODUCER, 'Исполнительный продюсер'),
+    (BUYER, 'Закупщик'),
 )
 
 
