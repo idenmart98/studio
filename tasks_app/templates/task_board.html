@@ -5,7 +5,6 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/task_board.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.css">
 
 <div class="board">
     <div class="column" id="to-do">
@@ -34,30 +33,8 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js"></script>
 <script>
-    var drake = dragula([document.getElementById('to-do'), document.getElementById('in-progress'), document.getElementById('done')]);
-
-    drake.on('drop', function (el, target, source, sibling) {
-        var taskId = el.getAttribute('data-id');
-        var newStatus = target.getAttribute('id').replace('-', '_');
-        updateTaskStatus(taskId, newStatus);
-    });
-
-    function updateTaskStatus(taskId, newStatus) {
-        fetch("{% url 'tasks:update_task_status' 0 %}".replace('0', taskId), {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: JSON.stringify({ status: newStatus })
-        }).then(response => response.json())
-          .then(data => {
-              if (data.status === 'success') {
-                  location.reload();
-              }
-          });
-    }
+    var UpdateTaskStatus = "{% url 'tasks:update_task_status' %}";
 </script>
+<script src="{% static 'js/task_board.js' %}"></script>
 {% endblock %}
