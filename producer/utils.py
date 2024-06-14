@@ -1,4 +1,4 @@
-from tasks_app.models import Task, ShopList
+from tasks_app.models import Task, ShopList, TaskEP
 
 def create_task(category_project):
     task = Task.objects.create(
@@ -8,3 +8,13 @@ def create_task(category_project):
     )
     
     ShopList.objects.create(task=task)
+
+def create_task_ep(task):
+    """
+    Create task for Executive Producer
+    """
+    TaskEP.objects.create(
+        task_type=TaskEP.ORDER,
+        status=TaskEP.TO_DO,
+        task_id=task.id
+    )

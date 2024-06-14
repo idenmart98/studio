@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ShopList, ShopListItem, Task
+from .models import ShopList, ShopListItem, Task, TaskEP
 
 @admin.register(ShopList)
 class ShopListAdmin(admin.ModelAdmin):
@@ -16,3 +16,8 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = ('task_type', 'category')
     search_fields = ('task_type',)
     list_filter = ('task_type', 'category')
+
+
+@admin.register(TaskEP)
+class TaskEPAdmin(admin.ModelAdmin):
+    readonly_fields = ("task_id",)

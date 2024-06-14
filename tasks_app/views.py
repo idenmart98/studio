@@ -3,7 +3,9 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .models import Task, ShopListItem, ShopList, Order
+
+from producer.utils import create_task_ep
+from .models import Task, ShopListItem, ShopList, Order, TaskEP
 from .forms import ShopListItemForm
 
 def task_board(request):
@@ -11,6 +13,13 @@ def task_board(request):
     tasks_to_do = Task.objects.filter(status=Task.TO_DO, category__user=user)
     tasks_in_progress = Task.objects.filter(status=Task.IN_PROGRESS, category__user=user)
     tasks_done = Task.objects.filter(status=Task.DONE, category__user=user)
+
+    # tasks for EP
+    if user.user_groups.first().name == 'EXECUTIVE_PRODUCER':
+        tasks_to_do = TaskEP.objects.filter(status=TaskEP.TO_DO)
+        tasks_in_progress = TaskEP.objects.filter(status=TaskEP.IN_PROGRESS)
+        tasks_done = TaskEP.objects.filter(status=TaskEP.DONE)
+
     return render(request, 'task_board.html', {
         'tasks_to_do': tasks_to_do,
         'tasks_in_progress': tasks_in_progress,
@@ -26,6 +35,11 @@ def update_task_status(request):
     task = Task.objects.get(id=task_id)
     task.status = new_status
     task.save()
+
+    # create task EP
+    if task.status == Task.DONE:
+        create_task_ep(task)
+
     return JsonResponse({'status': 'success'})
 
 
