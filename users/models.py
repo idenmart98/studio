@@ -2,7 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
-    pass
+    chat_id = models.CharField(
+        max_length=20, verbose_name='Чат id',
+        null=True, blank=True
+    )
 
 DEFAULT = 'DEFAULT'
 ACCOUNTANT = 'ACCOUNTANT'

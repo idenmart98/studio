@@ -30,7 +30,7 @@ class CategoryProject(models.Model):
 
 
 class Expense(models.Model):
-    name = models.TextField()
+    shop_list_item = models.OneToOneField('tasks_app.ShopListItem', on_delete=models.CASCADE)
     receipt_image = models.ImageField()
     cost = models.DecimalField(decimal_places=0, max_digits=12, default=0)
     category = models.ForeignKey(CategoryProject, on_delete=models.CASCADE)

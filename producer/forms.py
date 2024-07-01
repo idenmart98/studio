@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project, Category, CategoryProject
+from .models import Project, Category, CategoryProject, Expense
 
 class ProjectForm(forms.ModelForm):
     class Meta:
@@ -18,3 +18,10 @@ class CategoryProjectForm(forms.ModelForm):
     class Meta:
         model = CategoryProject
         fields = ['category', 'project', 'budget', 'user']
+
+
+class ExpenseForm(forms.ModelForm):
+    class Meta:
+        model = Expense
+        fields = ['receipt_image', 'cost']
+

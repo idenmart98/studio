@@ -33,7 +33,8 @@ class Task(models.Model):
         (IN_PROGRESS, 'In Progress'),
         (DONE, 'Done'),
     ]
-
+    
+    item_id = models.PositiveIntegerField(null=True, blank=True)
     task_type = models.CharField(max_length=50, choices=TASK_TYPE_CHOICES, default=BUY)
     category = models.ForeignKey('producer.CategoryProject', on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=TASK_STATUS_CHOICES, default=TO_DO)

@@ -21,6 +21,6 @@ admin.site.register(CategoryProject, CategoryProjectAdmin)
 
 
 class ExpenseAdmin(admin.ModelAdmin):
-    list_display=('name', )
+    list_display=('cost',)
 
 admin.site.register(Expense, ExpenseAdmin)
